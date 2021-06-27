@@ -3,7 +3,7 @@ branch="private"
 LVibration="1"
 X00TDOC="0"
 CODENAME="X01BD"
-BuilderKernel="proton"
+BuilderKernel="strix"
 
 if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "strix" ] && [ "$BuilderKernel" != "yuki" ] && [ "$BuilderKernel" != "sdclang" ] && [ "$BuilderKernel" != "aosp" ];then
     exit;
