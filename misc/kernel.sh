@@ -2,8 +2,7 @@
 
 chmod +x ${MainPath}/misc/bot.sh
 
-IncludeFiles ${MainPath}/misc/clang.sh
-IncludeFiles ${MainPath}/misc/gcc.sh
+IncludeFiles ${MainPath}/misc/compiler.sh
 
 getInfo() {
     echo -e "\e[1;32m$*\e[0m"
@@ -368,11 +367,7 @@ MakeZip(){
 	sed -i "s/kernel.made=.*/kernel.made=Nxtha @RaksasaGang/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
-	if [ ! -z "$CompileGccKernel" ];then
-	    sed -i "s/kernel.compiler=.*/kernel.compiler=GCC/g" anykernel.sh
-    else
-	    sed -i "s/kernel.compiler=.*/kernel.compiler=${TypeBuilder}/g" anykernel.sh
-	fi
+	sed -i "s/kernel.compiler=.*/kernel.compiler=${TypeBuilder}/g" anykernel.sh
     if [ "$CODENAME" == "Vayu" ];then
         cp -af $KernelPath/out/arch/$ARCH/boot/dtbo.img $AnyKernelPath
     fi
