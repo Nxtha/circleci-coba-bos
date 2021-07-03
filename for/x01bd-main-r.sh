@@ -12,8 +12,8 @@ spectrumFile="personal.rc"
 
 CloneKernel "--depth=1"
 CloneCompiledGccTwelve
-CloneProtonClang
-CompileClangKernel && CleanOut
+# CloneProtonClang
+# CompileClangKernel && CleanOut
 # CloneDTCClang
 # CompileClangKernel && CleanOut
 CompileGccKernel && CleanOut
