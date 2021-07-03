@@ -367,7 +367,7 @@ MakeZip(){
 	sed -i "s/kernel.made=.*/kernel.made=Nxtha @RaksasaGang/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
-	if [ -e $GCCbPath/bin/$for32-gcc ] && [ -e $GCCaPath/bin/$for64-gcc ];then
+	if [ "$ZipName" == "[GCC][$TypeBuildTag]$KVer-$KName-$CODENAME.zip" ];then
 	    sed -i "s/kernel.compiler=.*/kernel.compiler=GCC/g" anykernel.sh
     else
 	    sed -i "s/kernel.compiler=.*/kernel.compiler=${TypeBuilder}/g" anykernel.sh
