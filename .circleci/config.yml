@@ -1,0 +1,17 @@
+version: 2.1
+jobs:
+  compile:
+   docker:
+      - image: zycromerz/kerneldocker:v2
+   steps:
+      - run:
+          command: |
+            git clone https://$githubKey@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git -b $CIRCLE_BRANCH --depth=1
+            cd $CIRCLE_PROJECT_REPONAME
+            . main.sh
+          no_output_timeout : 5h
+workflows:
+  version: 2.1
+  cooking:
+    jobs:
+      - compile
