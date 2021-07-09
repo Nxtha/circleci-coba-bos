@@ -175,10 +175,10 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	Driver="NFI"
 	CpuFreq=""
 	if [ "$CODENAME" == "X00TD" ];then
-	DEVICE="Asus Max Pro M1"
+	DEVICE="Asus Zenfone Max Pro M1"
 	DEFFCONFIG="X00TD_defconfig"
 	elif [ "$CODENAME" == "X01BD" ];then
-	DEVICE="Asus Max Pro M2"
+	DEVICE="Asus Zenfone Max Pro M2"
 	DEFFCONFIG="X01BD_defconfig"
 	fi
 
@@ -209,11 +209,12 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         cd $mainDir
     fi
     cd $kernelDir
+    HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
 	if [ "$CODENAME" == "X00TD" ];then
 	if [ "$X00TDOC" == "0" ];then
 	if [ "$branch" == "r2/eas" ] || [ "$branch" == "eas-test" ];then
 	git revert ecec1905584509815a0fc33e354845e02324ae5e --no-commit
-	elif [ "$branch" == "personal" ] || [ "$branch" == "hmp-test" ];then
+	elif [ "$branch" == "private" ] || [ "$branch" == "hmp-test" ];then
 	git revert f32476500958218eb1267816bee1eb4068c961e1 --no-commit
 	fi
 	git commit -s -m "Back to stock freq"
@@ -232,7 +233,6 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
     KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
-    HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
     cd $mainDir
     apt-get -y update && apt-get -y upgrade && apt-get -y install tzdata git automake lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng bc libstdc++6 libncurses5 wget python3 python3-pip python gcc clang libssl-dev rsync flex git-lfs libz3-dev libz3-4 axel tar && python3 -m pip  install networkx
 fi
@@ -244,7 +244,7 @@ tg_send_info(){
         -d "parse_mode=html" \
         -d text="$1"
     else
-        curl -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" -d chat_id="-1001350392415" \
+        curl -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" -d chat_id="-1001467576014" \
         -d "disable_web_page_preview=true" \
         -d "parse_mode=html" \
         -d text="$1"
@@ -254,7 +254,7 @@ tg_send_info(){
 tg_send_sticker() {
     curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendSticker" \
         -d sticker="$1" \
-        -d chat_id="-1001350392415"
+        -d chat_id="-1001467576014"
 }
 
 tg_send_files(){
@@ -276,6 +276,7 @@ tg_send_files(){
         -F "parse_mode=html" \
         -F caption="$MSG"
         
+            tg_send_info "$MSG"
 			tg_send_sticker "$SID"
 		
 	if [ "$useGdrive" == "Y" ];then
@@ -315,6 +316,8 @@ CompileKernel(){
                 CC=clang \
                 CROSS_COMPILE=$for64- \
                 CROSS_COMPILE_ARM32=$for32- \
+                LD=ld.lld \
+                LD_LIBRARY_PATH=$clangDir/lib \
                 AR=llvm-ar \
                 NM=llvm-nm \
                 OBJCOPY=llvm-objcopy \
@@ -331,6 +334,8 @@ CompileKernel(){
                     CC=clang \
                     CROSS_COMPILE=$for64- \
                     CROSS_COMPILE_ARM32=$for32- \
+                    LD=ld.lld \
+                    LD_LIBRARY_PATH=$clangDir/lib \
                     AR=llvm-ar \
                     NM=llvm-nm \
                     OBJCOPY=llvm-objcopy \
@@ -346,6 +351,8 @@ CompileKernel(){
 						CC=clang \
 						CROSS_COMPILE=$for64- \
 						CROSS_COMPILE_ARM32=$for32- \
+						LD=ld.lld \
+						LD_LIBRARY_PATH=$clangDir/lib \
 						AR=llvm-ar \
 						AS=llvm-as \
 						NM=llvm-nm \
@@ -371,11 +378,19 @@ CompileKernel(){
             BuildNumber="${DRONE_BUILD_NUMBER}"
             ProgLink="https://cloud.drone.io/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/1/2"
         fi
-        if [ "$BuilderKernel" == "gcc" ];then
-            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  #$Vibrate #$Driver"
-        else
-            MSG="<b>🔨 Start Building Kernel... 🔨</b>%0A<b>Device:</b> $DEVICE%0A<b>Codename:</b> $CODENAME%0A<b>Build Date:</b> $GetCBD%0A<b>Kernel Name:</b> <code>$KName</code>%0A<b>Kernel Version:</b> <code>$KVer</code>%0A<b>Branch:</b> $branch%0A<b>Last Commit-Message:</b> $HeadCommitMsg%0A<b>Builder Info:</b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  #$Vibrate #$Driver"
-        fi
+        if [ ! -z "${CIRCLE_BRANCH}" ];then 
+         if [ "$BuilderKernel" == "gcc" ];then
+            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver"
+         else
+            MSG="<b>🔨 Start Building Kernel... 🔨</b>%0A<b>Build Started On:</b> <code>CircleCI</code>%0A<b>Device:</b> $DEVICE%0A<b>Codename:</b> $CODENAME%0A<b>Build Date:</b> $GetCBD%0A<b>Kernel Name:</b> <code>$KName</code>%0A<b>Kernel Version:</b> <code>$KVer</code>%0A<b>Branch:</b> $branch%0A<b>Last Commit-Message:</b> $HeadCommitMsg%0A<b>Builder Info:</b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver"
+         fi
+        elif [ ! -z "${DRONE_BRANCH}" ];then
+         if [ "$BuilderKernel" == "gcc" ];then
+            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver"
+         else
+            MSG="<b>🔨 Start Building Kernel... 🔨</b>%0A<b>Build Started On:</b> <code>DroneCI</code>%0A<b>Device:</b> $DEVICE%0A<b>Codename:</b> $CODENAME%0A<b>Build Date:</b> $GetCBD%0A<b>Kernel Name:</b> <code>$KName</code>%0A<b>Kernel Version:</b> <code>$KVer</code>%0A<b>Branch:</b> $branch%0A<b>Last Commit-Message:</b> $HeadCommitMsg%0A<b>Builder Info:</b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver"
+         fi
+        fi 
         if [ ! -z "$1" ];then
             tg_send_info "$MSG" "$1"
         else
@@ -412,6 +427,8 @@ CompileKernel(){
                 CC=clang \
                 CROSS_COMPILE=$for64- \
                 CROSS_COMPILE_ARM32=$for32- \
+                LD=ld.lld \
+                LD_LIBRARY_PATH=$clangDir/lib \
                 AR=llvm-ar \
                 NM=llvm-nm \
                 OBJCOPY=llvm-objcopy \
@@ -427,6 +444,8 @@ CompileKernel(){
                     CC=clang \
                     CROSS_COMPILE=$for64- \
                     CROSS_COMPILE_ARM32=$for32- \
+                    LD=ld.lld \
+                    LD_LIBRARY_PATH=$clangDir/lib \
                     AR=llvm-ar \
                     NM=llvm-nm \
                     OBJCOPY=llvm-objcopy \
@@ -441,6 +460,8 @@ CompileKernel(){
 					CC=clang \
 					CROSS_COMPILE=$for64- \
 					CROSS_COMPILE_ARM32=$for32- \
+					LD=ld.lld \
+					LD_LIBRARY_PATH=$clangDir/lib \
 					AR=llvm-ar \
 					AS=llvm-as \
 					NM=llvm-nm \
@@ -473,9 +494,9 @@ CompileKernel(){
 		FilenameVC="[$Vibrate$CpuFreq]"
 		fi
          if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="$FilenameVC$KName-$Driver-$KVer-$CODENAME.zip"
+            ZipName="[$KernelFor]$FilenameVC$KVer-$KName-$Driver-$TypeBuilder-$CODENAME.zip"
          else
-            ZipName="$FilenameVC$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="[$KernelFor]$FilenameVC$KVer-$KName-$Driver-$TypeBuilder-$CODENAME.zip"
          fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
@@ -500,13 +521,13 @@ MakeZip(){
 	if [ "$branch" = "hmp-test" ] || [ "$branch" = "eas-test" ];then
 	AKNAME="KnightWalker-Akira"
 	else
-	AKNAME="SkyWalker-Akatsuki"
+	AKNAME="Raksasa-Secret"
 	fi
 	VibCpu="$Vibrate$CpuFreq-"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$VibCpu$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
-	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
+	sed -i "s/kernel.made=.*/kernel.made=Nxtha @RaksasaGang/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	if [ "$KernelFor" == "P" ];then
@@ -575,7 +596,6 @@ SwitchOFI()
 	fi
     KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
-    HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
     KernelFor='R'
     RefreshRate="60"
 	Driver="OFI"

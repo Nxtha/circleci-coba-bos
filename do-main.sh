@@ -1,9 +1,9 @@
 #! /bin/bash
-branch="personal"
+branch="private-lto"
 LVibration="0"
 X00TDOC="0"
 CODENAME="X01BD"
-BuilderKernel="proton"
+BuilderKernel="strix"
 
 if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "strix" ] && [ "$BuilderKernel" != "yuki" ] && [ "$BuilderKernel" != "sdclang" ] && [ "$BuilderKernel" != "aosp" ];then
     exit;
@@ -31,14 +31,14 @@ AKbranch="edited"
 	if [ "$CODENAME" == "X00TD" ];then
 	spectrumFile="ryuu-x00t.rc"
 	else
-	spectrumFile="personal.rc"
+	spectrumFile="private.rc"
 	fi
 fi
 . main.sh 'initial' 'full'
 
 getInfo ">> Building kernel . . . . <<"
 
-CompileKernel
+# CompileKernel
 # CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
