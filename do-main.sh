@@ -1,5 +1,5 @@
 #! /bin/bash
-branch="private"
+branch="private-lto"
 LVibration="1"
 X00TDOC="0"
 CODENAME="X01BD"
