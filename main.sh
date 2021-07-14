@@ -214,7 +214,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$X00TDOC" == "0" ];then
 	if [ "$branch" == "r2/eas" ] || [ "$branch" == "eas-test" ];then
 	git revert ecec1905584509815a0fc33e354845e02324ae5e --no-commit
-	elif [ "$branch" == "private" ] || [ "$branch" == "hmp-test" ];then
+	elif [ "$branch" == "private-lto" ] || [ "$branch" == "private-test" ];then
 	git revert f32476500958218eb1267816bee1eb4068c961e1 --no-commit
 	fi
 	git commit -s -m "Back to stock freq"
@@ -260,7 +260,7 @@ tg_send_sticker() {
 tg_send_files(){
     KernelFiles="$(pwd)/$RealZipName"
 	MD5CHECK=$(md5sum "$KernelFiles" | cut -d' ' -f1)
-	SID="CAACAgIAAxkBAAECHLRgXwQil_BAaM1e-KDiMWOae4eDiwACBQADdVCBE2ZgZ4p9LOPEHgQ"
+	SID="CAACAgUAAxkBAAECkwJg7i3EHNGfxxtnIqAWJHtK-NiM3gACUwQAAt9w4VUNDkiSi-2gWSAE"
     MSG="✅ <b>Yay! Build Done and Success!</b> 
 - <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s) </code> 
 
@@ -380,15 +380,15 @@ CompileKernel(){
         fi
         if [ ! -z "${CIRCLE_BRANCH}" ];then 
          if [ "$BuilderKernel" == "gcc" ];then
-            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver"
+            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver #RaksasaGang"
          else
-            MSG="<b>🔨 Start Building Kernel... 🔨</b>%0A<b>Build Started On:</b> <code>CircleCI</code>%0A<b>Device:</b> $DEVICE%0A<b>Codename:</b> $CODENAME%0A<b>Build Date:</b> $GetCBD%0A<b>Kernel Name:</b> <code>$KName</code>%0A<b>Kernel Version:</b> <code>$KVer</code>%0A<b>Branch:</b> $branch%0A<b>Last Commit-Message:</b> $HeadCommitMsg%0A<b>Builder Info:</b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver"
+            MSG="<b>🔨 Start Building Kernel... 🔨</b>%0A<b>Build Started On:</b> <code>CircleCI</code>%0A<b>Device:</b> $DEVICE%0A<b>Codename:</b> $CODENAME%0A<b>Build Date:</b> $GetCBD%0A<b>Kernel Name:</b> <code>$KName</code>%0A<b>Kernel Version:</b> <code>$KVer</code>%0A<b>Branch:</b> $branch%0A<b>Last Commit-Message:</b> $HeadCommitMsg%0A<b>Builder Info:</b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver #RaksasaGang"
          fi
         elif [ ! -z "${DRONE_BRANCH}" ];then
          if [ "$BuilderKernel" == "gcc" ];then
-            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver"
+            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver #RaksasaGang"
          else
-            MSG="<b>🔨 Start Building Kernel... 🔨</b>%0A<b>Build Started On:</b> <code>DroneCI</code>%0A<b>Device:</b> $DEVICE%0A<b>Codename:</b> $CODENAME%0A<b>Build Date:</b> $GetCBD%0A<b>Kernel Name:</b> <code>$KName</code>%0A<b>Kernel Version:</b> <code>$KVer</code>%0A<b>Branch:</b> $branch%0A<b>Last Commit-Message:</b> $HeadCommitMsg%0A<b>Builder Info:</b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver"
+            MSG="<b>🔨 Start Building Kernel... 🔨</b>%0A<b>Build Started On:</b> <code>DroneCI</code>%0A<b>Device:</b> $DEVICE%0A<b>Codename:</b> $CODENAME%0A<b>Build Date:</b> $GetCBD%0A<b>Kernel Name:</b> <code>$KName</code>%0A<b>Kernel Version:</b> <code>$KVer</code>%0A<b>Branch:</b> $branch%0A<b>Last Commit-Message:</b> $HeadCommitMsg%0A<b>Builder Info:</b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$Vibrate #$Driver #RaksasaGang"
          fi
         fi 
         if [ ! -z "$1" ];then
@@ -480,7 +480,7 @@ CompileKernel(){
     BUILD_END=$(date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
 	if [[ ! -e $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb ]];then
-		SID="CAACAgUAAxkBAAIb12By2GpymhVy7G9g1Y5D2FcgvYr7AALZAQAC4dzJVslZcFisbk9nHgQ"
+		SID="CAACAgUAAxkBAAEChIZg3p4KZnliTQwcDiZJrxABudRdZAAC-AEAAipN4VWqUz08pIDCGyAE"
         MSG="<b>❌ Build failed</b>%0AKernel Name : <b>${KName}</b>%0A- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s)</code>%0A%0ASad Boy"
 		
         tg_send_info "$MSG" 
@@ -518,8 +518,8 @@ MakeZip(){
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
-	if [ "$branch" = "hmp-test" ] || [ "$branch" = "eas-test" ];then
-	AKNAME="KnightWalker-Akira"
+	if [ "$branch" = "private-test" ] || [ "$branch" = "eas-test" ];then
+	AKNAME="Raksasa-SeTest"
 	else
 	AKNAME="Raksasa-Secret"
 	fi
@@ -578,7 +578,7 @@ SwitchOFI()
 	if [ "$X00TDOC" == "0" ];then
 	if [ "$branch" == "r2/eas" ] || [ "$branch" == "eas-test" ];then
 	git revert ecec1905584509815a0fc33e354845e02324ae5e --no-commit
-	elif [ "$branch" == "r2/hmp" ] || [ "$branch" == "hmp-test" ];then
+	elif [ "$branch" == "private-lto" ] || [ "$branch" == "private-test" ];then
 	git revert f32476500958218eb1267816bee1eb4068c961e1 --no-commit
 	fi
 	git commit -s -m "Back to stock freq"
@@ -600,10 +600,10 @@ SwitchOFI()
     RefreshRate="60"
 	Driver="OFI"
 	if [ "$CODENAME" == "X00TD" ];then
-	DEVICE="Asus Max Pro M1"
+	DEVICE="Asus Zenfone Max Pro M1"
 	DEFFCONFIG="X00TD_defconfig"
 	elif [ "$CODENAME" == "X01BD" ];then
-	DEVICE="Asus Max Pro M2"
+	DEVICE="Asus Zenfone Max Pro M2"
 	DEFFCONFIG="X01BD_defconfig"
 	fi
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
@@ -625,7 +625,7 @@ FixPieWifi()
 	if [ "$X00TDOC" == "0" ];then
 	if [ "$branch" == "r2/eas" ] || [ "$branch" == "eas-test" ];then
 	git revert ecec1905584509815a0fc33e354845e02324ae5e --no-commit
-	elif [ "$branch" == "r2/hmp" ] || [ "$branch" == "hmp-test" ];then
+	elif [ "$branch" == "private-lto" ] || [ "$branch" == "private-test" ];then
 	git revert f32476500958218eb1267816bee1eb4068c961e1 --no-commit
 	fi
 	git commit -s -m "Back to stock freq"
@@ -645,10 +645,10 @@ FixPieWifi()
 	Driver="Pie"
 	Vibrate=""
 	if [ "$CODENAME" == "X00TD" ];then
-	DEVICE="Asus Max Pro M1"
+	DEVICE="Asus Zenfone Max Pro M1"
 	DEFFCONFIG="X00TD_defconfig"
 	elif [ "$CODENAME" == "X01BD" ];then
-	DEVICE="Asus Max Pro M2"
+	DEVICE="Asus Zenfone Max Pro M2"
 	DEFFCONFIG="X01BD_defconfig"
 	fi
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
