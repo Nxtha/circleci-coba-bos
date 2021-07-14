@@ -10,7 +10,7 @@ if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$Buil
 fi
 
 FolderUp="BrokenNucleus"
-TypeBuild="RELEASE"
+TypeBuild="STABLE"
 if [ "$branch" = "r2/eas" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
