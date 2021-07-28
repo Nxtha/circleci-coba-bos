@@ -1,5 +1,5 @@
 #! /bin/bash 
-KernelBranch="20210630/neu-r"
+KernelBranch="18.1-edit"
 
 IncludeFiles "${MainPath}/device/x01bd.sh"
 CustomUploader="N"
@@ -14,7 +14,7 @@ CloneKernel "--depth=1"
 CloneCompiledGccTwelve
 CloneProtonClang
 CompileClangKernel && CleanOut
-CloneDTCClang
-CompileClangKernel && CleanOut
-CompileGccKernel && CleanOut
+# CloneDTCClang
+# CompileClangKernel && CleanOut
+# CompileGccKernel && CleanOut
 
