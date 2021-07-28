@@ -1,5 +1,5 @@
 #! /bin/bash 
-KernelBranch="20210630/neu-r"
+KernelBranch="raksasa-test"
 
 IncludeFiles "${MainPath}/device/x01bd.sh"
 CustomUploader="N"
@@ -8,13 +8,13 @@ IncludeFiles "${MainPath}/misc/kernel.sh" "https://${GIT_SECRET}@github.com/${GI
 FolderUp="xobod-r"
 doSFUp=$FolderUp
 TypeBuildTag="R"
-spectrumFile="personal.rc"
+spectrumFile="private.rc"
 
 CloneKernel "--depth=1"
 CloneCompiledGccTwelve
 CloneProtonClang
 CompileClangKernel && CleanOut
-CloneDTCClang
-CompileClangKernel && CleanOut
-CompileGccKernel && CleanOut
+# CloneDTCClang
+# CompileClangKernel && CleanOut
+# CompileGccKernel && CleanOut
 
