@@ -1,5 +1,5 @@
 #! /bin/bash
-branch="private-lto"
+branch="raksasa-test-lto"
 LVibration="1"
 X00TDOC="0"
 CODENAME="X01BD"
@@ -31,7 +31,7 @@ AKbranch="edited"
 	if [ "$CODENAME" == "X00TD" ];then
 	spectrumFile="ryuu-x00t.rc"
 	else
-	spectrumFile="private.rc"
+	spectrumFile="personal.rc"
 	fi
 fi
 . main.sh 'initial' 'full'
