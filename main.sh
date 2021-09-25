@@ -123,6 +123,14 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		export LD=ld.lld
 		export LD_LIBRARY_PATH="$clangDir/lib64:$LD_LIBRARY_PATH"
 	fi
+	if [ "$BuilderKernel" == "atom" ];then
+        getInfo ">> cloning Atom-X clang 14 . . . <<"
+        git clone https://gitlab.com/ElectroPerf/atom-x-clang -b atom-14 $clangDir --depth=1
+		allFromClang="Y"
+		Compiler="Atom-X Clang"
+		TypeBuilder="Atom-X"
+		TypePrint="Atom-X"
+    fi 
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
         git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
