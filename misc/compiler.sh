@@ -60,6 +60,49 @@ CloneProtonClang(){
     ClangType="$(${ClangPath}/bin/clang --version | head -n 1)"
 }
 
+CloneStrixClang(){
+    [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
+    if [ ! -d "${ClangPath}" ];then
+        git clone https://github.com/STRIX-Project/STRIX-clang -b main "${ClangPath}" --depth=1
+    else
+        cd "${ClangPath}"
+        git fetch https://github.com/STRIX-Project/STRIX-clang main --depth=1
+        git checkout FETCH_HEAD
+        [[ ! -z "$(git branch | grep main)" ]] && git branch -D main
+        git checkout -b main
+    fi
+    TypeBuilder="STRIX"
+    ClangType="$(${ClangPath}/bin/clang --version | head -n 1)"
+}
+
+CloneGCCTenRepo(){
+    [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
+    GCCaPath="${MainGCCaPath}"
+    if [ ! -d "$GCCaPath" ];then
+        git clone https://github.com/RyuujiX/aarch64-linux-gnu -b stable-gcc $GCCaPath --depth=1
+    else
+        cd "${GCCaPath}"
+        git fetch https://github.com/RyuujiX/aarch64-linux-gnu -b stable-gcc --depth=1
+        git checkout FETCH_HEAD
+        [[ ! -z "$(git branch | grep stable-gcc)" ]] && git branch -D stable-gcc
+        git checkout -b stable-gcc
+    fi
+    for64=aarch64-linux-android
+    [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
+    GCCbPath="${MainGCCbPath}"
+    if [ ! -d "$GCCbPath" ];then
+        git clone https://github.com/RyuujiX/arm-linux-gnueabi -b stable-gcc $GCCbPath --depth=1
+    else
+        cd "${GCCbPath}"
+        git fetch https://github.com/RyuujiX/arm-linux-gnueabi -b stable-gcc --depth=1
+        git checkout FETCH_HEAD
+        [[ ! -z "$(git branch | grep stable-gcc)" ]] && git branch -D stable-gcc
+        git checkout -b stable-gcc
+    fi
+    for32=arm-linux-androideabi
+    GetGccVersion
+}
+
 CloneCompiledGcc(){
     [[ "$(pwd)" != "${MainPath}" ]] && cd "${MainPath}"
     GCCaPath="$MainZipGCCaPath"
