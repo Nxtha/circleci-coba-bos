@@ -11,9 +11,9 @@ TypeBuildTag="R"
 spectrumFile="personal.rc"
 
 CloneKernel "--depth=1"
-CloneCompiledGccEleven
+#CloneCompiledGccEleven
 CloneProtonClang
-CompileClangKernel && CleanOut
+CompileProtonClangKernel && CleanOut
 # CloneDTCClang
 # CompileClangKernel && CleanOut
 # CompileGccKernel && CleanOut
